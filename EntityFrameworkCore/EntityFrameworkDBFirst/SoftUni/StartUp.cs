@@ -16,7 +16,7 @@ namespace SoftUni
 
             optionBuilder.UseSqlServer("Server=.;Database=SoftUni;Integrated Security=True;");
 
-            var context = new SoftUniContext();
+            var context = new SoftUniContext(optionBuilder.Options);
 
             using (context)
             {
