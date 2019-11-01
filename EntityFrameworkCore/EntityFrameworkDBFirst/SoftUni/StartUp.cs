@@ -20,7 +20,6 @@ namespace SoftUni
 
             using (context)
             {
-
                 var projects = GetAddressesByTown(context);
 
                 Console.WriteLine(projects);
@@ -407,6 +406,5 @@ namespace SoftUni
 
             return result.ToString().TrimEnd();
         }
-
     }
 }
