@@ -23,7 +23,6 @@ namespace SoftUni
 
                 var projects = GetAddressesByTown(context);
 
-
                 Console.WriteLine(projects);
             }
         }
