@@ -59,6 +59,11 @@ namespace P03_SalesDatabase.Data
                 .Entity<Product>()
                 .Property(b => b.Description)
                 .HasDefaultValue("No description");
+
+            modelBuilder
+                 .Entity<Sale>()
+                 .Property(b => b.Date)
+                 .HasDefaultValueSql("GetDate()");
         }
     }
 }
