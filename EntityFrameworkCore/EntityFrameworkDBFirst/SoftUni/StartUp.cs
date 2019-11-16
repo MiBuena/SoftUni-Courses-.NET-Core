@@ -14,12 +14,16 @@ namespace SoftUni
         {
             var optionBuilder = new DbContextOptionsBuilder<SoftUniContext>();
 
-            optionBuilder.UseSqlServer("Server=.;Database=SoftUni;Integrated Security=True;");
+            optionBuilder.UseSqlServer("Server=DESKTOP-EFGPD5V\\SQLEXPRESS;Database=SoftUni;Integrated Security=True;");
 
             var context = new SoftUniContext(optionBuilder.Options);
 
             using (context)
             {
+
+                var a = context.Employees.GroupBy(x => x.AddressId).ToList();
+
+
                 var projects = GetAddressesByTown(context);
 
                 Console.WriteLine(projects);
