@@ -1,4 +1,5 @@
-﻿using P01_HospitalDatabase.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using P01_HospitalDatabase.Data;
 using System;
 
 namespace P01_HospitalDatabase
@@ -7,7 +8,10 @@ namespace P01_HospitalDatabase
     {
         static void Main(string[] args)
         {
-
+            using (var context = new HospitalContext())
+            {
+                context.Database.Migrate();
+            }
         }
     }
 }

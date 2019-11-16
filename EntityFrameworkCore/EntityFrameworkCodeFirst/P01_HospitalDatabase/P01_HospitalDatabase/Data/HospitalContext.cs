@@ -18,6 +18,9 @@ namespace P01_HospitalDatabase.Data
 
         public DbSet<PatientMedicament> PatientsMedicaments { get; set; }
 
+        public DbSet<Doctor> Doctors { get; set; }
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -75,6 +78,18 @@ namespace P01_HospitalDatabase.Data
                 .HasOne(x => x.Patient)
                 .WithMany(x => x.Prescriptions)
                 .HasForeignKey(x => x.PatientId);
+
+            modelBuilder.Entity<Doctor>(entity =>
+            {
+                entity.Property(e => e.Name).IsUnicode(true);
+                entity.Property(e => e.Specialty).IsUnicode(true);
+            });
+
+            modelBuilder
+                .Entity<Doctor>()
+                .HasMany(x => x.Visitations)
+                .WithOne(x => x.Doctor)
+                .HasForeignKey(x => x.DoctorId);
         }
     }
 }
