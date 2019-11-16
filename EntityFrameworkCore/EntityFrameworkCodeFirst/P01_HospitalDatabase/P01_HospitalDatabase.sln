@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P01_HospitalDatabase", "P01_HospitalDatabase\P01_HospitalDatabase.csproj", "{BAB00FE0-19A1-4CA4-AC20-B9AF30D0FFD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P03_SalesDatabase", "P03_SalesDatabase\P03_SalesDatabase.csproj", "{5B862F86-AD5D-48D2-8342-CE9B0EDED02C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BAB00FE0-19A1-4CA4-AC20-B9AF30D0FFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAB00FE0-19A1-4CA4-AC20-B9AF30D0FFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAB00FE0-19A1-4CA4-AC20-B9AF30D0FFD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B862F86-AD5D-48D2-8342-CE9B0EDED02C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B862F86-AD5D-48D2-8342-CE9B0EDED02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B862F86-AD5D-48D2-8342-CE9B0EDED02C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B862F86-AD5D-48D2-8342-CE9B0EDED02C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
