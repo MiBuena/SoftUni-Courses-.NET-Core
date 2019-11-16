@@ -21,7 +21,7 @@ namespace P03_SalesDatabase.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-EFGPD5V\\SQLEXPRESS;Database=SalesContext;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=SalesContext;Integrated Security=True;");
             }
         }
 
