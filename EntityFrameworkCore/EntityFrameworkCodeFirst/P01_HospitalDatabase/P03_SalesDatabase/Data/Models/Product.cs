@@ -23,6 +23,10 @@ namespace P03_SalesDatabase.Data.Models
 
         public decimal Price { get; set; }
 
+        [Required]
+        [MaxLength(250)]
+        public string Description { get; set; }
+
         public HashSet<Sale> Sales { get; set; }
     }
 }

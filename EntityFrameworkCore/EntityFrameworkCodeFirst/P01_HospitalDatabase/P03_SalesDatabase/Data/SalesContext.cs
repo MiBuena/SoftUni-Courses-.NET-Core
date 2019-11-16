@@ -54,6 +54,11 @@ namespace P03_SalesDatabase.Data
                 .HasOne(x => x.Store)
                 .WithMany(x => x.Sales)
                 .HasForeignKey(x => x.StoreId);
+
+            modelBuilder
+                .Entity<Product>()
+                .Property(b => b.Description)
+                .HasDefaultValue("No description");
         }
     }
 }
