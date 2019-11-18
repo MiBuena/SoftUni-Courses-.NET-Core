@@ -3,6 +3,7 @@ using P03_SalesDatabase.Data.Configurations;
 using P03_SalesDatabase.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace P03_SalesDatabase.Data
@@ -33,9 +34,7 @@ namespace P03_SalesDatabase.Data
                 entity.Property(e => e.Name).IsUnicode(true);
             });
 
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
-
-            modelBuilder.ApplyConfiguration(new SaleConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
