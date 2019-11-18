@@ -28,23 +28,14 @@ namespace P03_SalesDatabase.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.Property(e => e.Name).IsUnicode(true);
-            });
-
             modelBuilder.Entity<Store>(entity =>
             {
                 entity.Property(e => e.Name).IsUnicode(true);
             });
 
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+
             modelBuilder.ApplyConfiguration(new SaleConfiguration());
-
-            modelBuilder
-                .Entity<Product>()
-                .Property(b => b.Description)
-                .HasDefaultValue("No description");
-
         }
     }
 }

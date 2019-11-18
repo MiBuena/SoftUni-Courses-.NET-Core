@@ -9,27 +9,27 @@ namespace P03_SalesDatabase.Data.Configurations
 {
     public class SaleConfiguration : IEntityTypeConfiguration<Sale>
     {
-        public void Configure(EntityTypeBuilder<Sale> entity)
+        public void Configure(EntityTypeBuilder<Sale> sale)
         {
-            entity
+            sale
               .HasOne(x => x.Product)
               .WithMany(x => x.Sales)
               .HasForeignKey(x => x.ProductId)
               .OnDelete(DeleteBehavior.Restrict);
 
-            entity
+            sale
                 .HasOne(x => x.Customer)
                 .WithMany(x => x.Sales)
                 .HasForeignKey(x => x.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity
+            sale
                 .HasOne(x => x.Store)
                 .WithMany(x => x.Sales)
                 .HasForeignKey(x => x.StoreId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity
+            sale
                 .Property(b => b.Date)
                 .HasDefaultValueSql("GetDate()");
         }
