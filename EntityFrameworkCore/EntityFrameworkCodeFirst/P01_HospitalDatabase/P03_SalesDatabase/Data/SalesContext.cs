@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using P03_SalesDatabase.Data.Configurations;
 using P03_SalesDatabase.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -37,33 +38,13 @@ namespace P03_SalesDatabase.Data
                 entity.Property(e => e.Name).IsUnicode(true);
             });
 
-            modelBuilder
-                .Entity<Sale>()
-                .HasOne(x => x.Product)
-                .WithMany(x => x.Sales)
-                .HasForeignKey(x => x.ProductId);
-
-            modelBuilder
-                .Entity<Sale>()
-                .HasOne(x => x.Customer)
-                .WithMany(x => x.Sales)
-                .HasForeignKey(x => x.CustomerId);
-
-            modelBuilder
-                .Entity<Sale>()
-                .HasOne(x => x.Store)
-                .WithMany(x => x.Sales)
-                .HasForeignKey(x => x.StoreId);
+            modelBuilder.ApplyConfiguration(new SaleConfiguration());
 
             modelBuilder
                 .Entity<Product>()
                 .Property(b => b.Description)
                 .HasDefaultValue("No description");
 
-            modelBuilder
-                 .Entity<Sale>()
-                 .Property(b => b.Date)
-                 .HasDefaultValueSql("GetDate()");
         }
     }
 }
