@@ -18,6 +18,6 @@ namespace P03_SalesDatabase.Data.Models
         [MaxLength(80)]
         public string Name { get; set; }
 
-        public HashSet<Sale> Sales { get; set; }
+        public ICollection<Sale> Sales { get; set; }
     }
 }
