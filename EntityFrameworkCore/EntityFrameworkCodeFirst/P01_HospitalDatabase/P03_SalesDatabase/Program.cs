@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using P03_SalesDatabase.Data;
 using System;
+using System.Linq;
 
 namespace P03_SalesDatabase
 {
@@ -10,7 +11,7 @@ namespace P03_SalesDatabase
         {
             using (var context = new SalesContext())
             {
-                context.Database.Migrate();
+                var a = context.Products.GroupBy(x => x.Name).ToList();
             }
         }
     }
