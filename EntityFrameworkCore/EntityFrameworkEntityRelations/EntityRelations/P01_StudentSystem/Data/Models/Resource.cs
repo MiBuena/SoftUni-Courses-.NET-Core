@@ -16,7 +16,7 @@ namespace P01_StudentSystem.Data.Models
 
         public ResourceType ResourceType { get; set; }
 
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
 
         public Course Course { get; set; }
     }
