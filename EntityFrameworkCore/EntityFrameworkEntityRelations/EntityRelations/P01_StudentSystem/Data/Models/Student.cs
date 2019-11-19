@@ -8,6 +8,12 @@ namespace P01_StudentSystem.Data.Models
 {
     public class Student
     {
+        public Student()
+        {
+            HomeworkSubmissions = new HashSet<Homework>();
+            CourseEnrollments = new HashSet<StudentCourse>();
+        }
+
         public int Id { get; set; }
 
         [MaxLength(100)]
@@ -18,5 +24,9 @@ namespace P01_StudentSystem.Data.Models
         public DateTime RegisteredOn { get; set; }
 
         public DateTime? Birthday { get; set; }
+
+        public ICollection<Homework> HomeworkSubmissions { get; set; }
+
+        public ICollection<StudentCourse> CourseEnrollments { get; set; }
     }
 }

@@ -11,11 +11,18 @@ namespace P01_StudentSystem.Data
     {
         public DbSet<Student> Students { get; set; }
 
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<Homework> Homeworks { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-EFGPD5V\\SQLEXPRESS;Database=StudentSystemContext;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=StudentSystemContext;Integrated Security=True;");
             }
         }
 

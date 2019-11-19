@@ -8,10 +8,10 @@ namespace P01_StudentSystem
     {
         static void Main(string[] args)
         {
-            using (var context = new StudentSystemContext())
-            {
-                context.Database.Migrate();
-            }
+            //using (var context = new StudentSystemContext())
+            //{
+            //    context.Database.Migrate();
+            //}
         }
     }
 }
