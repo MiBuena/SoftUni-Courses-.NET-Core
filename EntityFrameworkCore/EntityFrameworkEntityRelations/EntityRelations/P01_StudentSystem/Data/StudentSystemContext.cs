@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using P01_StudentSystem.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,6 +9,8 @@ namespace P01_StudentSystem.Data
 {
     public class StudentSystemContext : DbContext
     {
+        public DbSet<Student> Students { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
