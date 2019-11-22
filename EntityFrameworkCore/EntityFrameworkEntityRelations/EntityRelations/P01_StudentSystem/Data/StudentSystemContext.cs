@@ -22,7 +22,7 @@ namespace P01_StudentSystem.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=StudentSystemContext;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-EFGPD5V\\SQLEXPRESS;Database=StudentSystemContext;Integrated Security=True;");
             }
         }
 
