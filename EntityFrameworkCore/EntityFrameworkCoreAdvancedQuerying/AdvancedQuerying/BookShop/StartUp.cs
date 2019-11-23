@@ -17,7 +17,7 @@ namespace BookShop
             {
                 //context.Database.Migrate();
 
-                IncreasePrices(context);
+                //IncreasePrices(context);
 
                 //Console.WriteLine(result);
             }
@@ -272,6 +272,13 @@ namespace BookShop
                 {
                     Price = x.Price * 1.05M
                 });
+        }
+
+        public static int RemoveBooks(BookShopContext context)
+        {
+            var numberOfRows = context.Books.Where(x => x.Copies < 4200).Delete();
+
+            return numberOfRows;
         }
     }
 }
