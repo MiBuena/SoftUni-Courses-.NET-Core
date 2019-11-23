@@ -6,14 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BookShop.Data\BookShop.Data.csproj" />
+    <ProjectReference Include="..\BookShop.Models\BookShop.Models.csproj" />
   </ItemGroup>
 
 </Project>
