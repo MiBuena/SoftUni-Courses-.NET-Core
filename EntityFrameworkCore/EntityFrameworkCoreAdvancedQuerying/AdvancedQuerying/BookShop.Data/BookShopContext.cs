@@ -21,7 +21,7 @@ namespace BookShop.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-EFGPD5V\\SQLEXPRESS;Database=BookShopContext;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=BookShopContext;Integrated Security=True;");
             }
         }
 
