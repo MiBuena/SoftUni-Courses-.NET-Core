@@ -1,9 +1,11 @@
 ﻿using BookShop.Data;
+using BookShop.Models;
 using BookShop.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Text;
+using Z.EntityFramework.Plus;
 
 namespace BookShop
 {
@@ -15,9 +17,9 @@ namespace BookShop
             {
                 //context.Database.Migrate();
 
-                var result = GetMostRecentBooks(context);
+                IncreasePrices(context);
 
-                Console.WriteLine(result);
+                //Console.WriteLine(result);
             }
         }
 
@@ -260,6 +262,16 @@ namespace BookShop
             }
 
             return result.ToString();
+        }
+
+        public static void IncreasePrices(BookShopContext context)
+        {
+            context.Books
+                .Where(x => x.ReleaseDate.Value.Year < 2010)
+                .Update(x => new Book()
+                {
+                    Price = x.Price * 1.05M
+                });
         }
     }
 }
