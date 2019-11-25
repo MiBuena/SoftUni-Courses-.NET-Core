@@ -11,7 +11,7 @@ namespace P03_SalesDatabase
         {
             using (var context = new SalesContext())
             {
-                var a = context.Products.GroupBy(x => x.Name).ToList();
+                //var a = context.Products.GroupBy(x => x.Name).ToList();
             }
         }
     }
