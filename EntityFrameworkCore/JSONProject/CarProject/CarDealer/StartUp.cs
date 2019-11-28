@@ -45,7 +45,6 @@ namespace CarDealer
                 .Take(10)
                 .ToList();
 
-
             var resolver = new DefaultContractResolver()
             {
                 NamingStrategy = new CamelCaseNamingStrategy()
