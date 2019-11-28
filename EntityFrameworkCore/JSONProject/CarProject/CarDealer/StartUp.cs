@@ -18,12 +18,48 @@ namespace CarDealer
         {
             using (var context = new CarDealerContext())
             {
-                var inputJson = File.ReadAllText("./../../../Datasets/sales.json");
-
-                var result = GetTotalSalesByCustomer(context);
+                var result = GetSalesWithAppliedDiscount(context);
 
                 Console.WriteLine(result);
             }
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var firstSales = context
+                .Sales
+                .OrderBy(x => x.Id)
+                .Select(x => new CarSaleDTO
+                {
+                    Car = new CarDataDTO
+                    {
+                        Make = x.Car.Make,
+                        Model = x.Car.Model,
+                        TravelledDistance = x.Car.TravelledDistance
+                    },
+                    CustomerName = x.Customer.Name,
+                    Discount = string.Format("{0:F2}", x.Discount),
+                    Price = string.Format("{0:F2}", x.Car.PartCars.Sum(y => y.Part.Price)),
+                    PriceWithDiscount = string.Format("{0:F2}", x.Car.PartCars.Sum(y => y.Part.Price) * (1 - (x.Discount / 100)))
+                })
+                .Take(10)
+                .ToList();
+
+
+            var resolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var newSettings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = resolver
+            };
+
+            var jsonProduct = JsonConvert.SerializeObject(firstSales, newSettings);
+
+            return jsonProduct;
         }
 
         public static string GetTotalSalesByCustomer(CarDealerContext context)
@@ -34,10 +70,10 @@ namespace CarDealer
                 {
                     FullName = x.Name,
                     BoughtCars = x.Sales.Count,
-                    SpentMoney = x.Sales.Sum(y=>y.Car.PartCars.Sum(m=>m.Part.Price))
+                    SpentMoney = x.Sales.Sum(y => y.Car.PartCars.Sum(m => m.Part.Price))
                 })
-                .OrderByDescending(x=>x.SpentMoney)
-                .ThenByDescending(x=>x.BoughtCars)
+                .OrderByDescending(x => x.SpentMoney)
+                .ThenByDescending(x => x.BoughtCars)
                 .ToList();
 
 
