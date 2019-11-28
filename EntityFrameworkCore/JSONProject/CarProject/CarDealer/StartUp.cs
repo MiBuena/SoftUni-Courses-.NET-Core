@@ -8,6 +8,7 @@ using CarDealer.DTO;
 using CarDealer.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CarDealer
 {
@@ -19,10 +20,41 @@ namespace CarDealer
             {
                 var inputJson = File.ReadAllText("./../../../Datasets/sales.json");
 
-                var result = GetCarsWithTheirListOfParts(context);
+                var result = GetTotalSalesByCustomer(context);
 
                 Console.WriteLine(result);
             }
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var salesData = context.Customers
+                .Where(x => x.Sales.Any())
+                .Select(x => new
+                {
+                    FullName = x.Name,
+                    BoughtCars = x.Sales.Count,
+                    SpentMoney = x.Sales.Sum(y=>y.Car.PartCars.Sum(m=>m.Part.Price))
+                })
+                .OrderByDescending(x=>x.SpentMoney)
+                .ThenByDescending(x=>x.BoughtCars)
+                .ToList();
+
+
+            var resolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var newSettings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = resolver
+            };
+
+            var jsonProduct = JsonConvert.SerializeObject(salesData, newSettings);
+
+            return jsonProduct;
         }
 
         public static string GetCarsWithTheirListOfParts(CarDealerContext context)
