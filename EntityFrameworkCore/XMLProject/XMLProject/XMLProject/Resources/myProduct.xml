@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfBook xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Book name="First author">
+    <make>First book</make>
+  </Book>
+  <Book name="Second author">
+    <make>Second book</make>
+  </Book>
+</ArrayOfBook>
