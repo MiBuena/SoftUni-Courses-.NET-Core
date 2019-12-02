@@ -8,17 +8,9 @@ namespace ProductShop
     {
         public ProductShopProfile()
         {
-            CreateMap<UserDTO, User>()
-                .ForMember(
-        dest => dest.Age,
-        opt => opt.MapFrom(src => src.Age == null ? (int?)null : int.Parse(src.Age))
-    );
-
-            CreateMap<ProductDTO, Product>()
-                   .ForMember(
-        dest => dest.SellerId,
-        opt => opt.MapFrom(src => 1));
-
+            CreateMap<UserDTO, User>();
+            
+            CreateMap<CategoryDTO, Category>();
         }
     }
 }

@@ -5,16 +5,16 @@ using System.Xml.Serialization;
 
 namespace ProductShop.DTOs
 {
-    [XmlType("user")]
+    [XmlType("User")]
     public class UserDTO
     {
-        [XmlAttribute("firstName")]
+        [XmlElement("firstName")]
         public string FirstName { get; set; }
 
-        [XmlAttribute("lastName")]
+        [XmlElement("lastName")]
         public string LastName { get; set; }
 
-        [XmlAttribute("age")]
-        public string Age { get; set; }
+        [XmlElement("age")]
+        public int? Age { get; set; }
     }
 }
