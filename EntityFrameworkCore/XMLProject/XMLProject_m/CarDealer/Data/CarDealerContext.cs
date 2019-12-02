@@ -6,10 +6,10 @@
 
     public class CarDealerContext : DbContext
     {
-        //public CarDealerContext(DbContextOptions options)
-        //    : base(options)
-        //{
-        //}
+        public CarDealerContext(DbContextOptions options)
+            : base(options)
+        {
+        }
 
         public CarDealerContext()
         {

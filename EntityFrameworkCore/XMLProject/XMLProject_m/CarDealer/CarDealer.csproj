@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Dtos\Export\" />
-    <Folder Include="Dtos\Import\" />
   </ItemGroup>
 
 </Project>
