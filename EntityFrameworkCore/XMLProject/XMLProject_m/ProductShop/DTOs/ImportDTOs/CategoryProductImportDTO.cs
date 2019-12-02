@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace ProductShop.DTOs
+namespace ProductShop.DTOs.ImportDTOs
 {
     [XmlType("CategoryProduct")]
-    public class CategoryProductDTO
+    public class CategoryProductImportDTO
     {
         [XmlElement("CategoryId")]
         public int CategoryId { get; set; }

@@ -2,11 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using ProductShop.Data;
 using ProductShop.DTOs;
+using ProductShop.DTOs.ExportDTOs;
+using ProductShop.DTOs.ImportDTOs;
 using ProductShop.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace ProductShop
@@ -20,30 +23,62 @@ namespace ProductShop
                 string xmlString = System.IO.File.ReadAllText("./../../../Datasets/categories-products.xml");
 
                 //context.Database.Migrate();
-                var result = ImportCategoryProducts(context, xmlString);
+                var result = GetProductsInRange(context);
 
                 Console.WriteLine(result);
             }
         }
 
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var products = context.Products
+                .Where(x => x.Price >= 500 && x.Price <= 1000)
+                .OrderBy(x => x.Price)
+                .Select(x => new ProductsInRangeExportDTO()
+                {
+                    Name = x.Name,
+                    Price = x.Price,
+                    Buyer = $"{x.Buyer.FirstName} {x.Buyer.LastName}"
+                })
+                .Take(10)
+                .ToList();
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<ProductsInRangeExportDTO>),
+                new XmlRootAttribute("Products"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, products, namespaces);
+            }
+
+            return sb.ToString();
+        }
+
 
         public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<CategoryProductDTO>), new XmlRootAttribute("CategoryProducts"));
-            
-            var deserializedCategories = new List<CategoryProductDTO>();
+            var serializer = new XmlSerializer(typeof(List<CategoryProductImportDTO>), new XmlRootAttribute("CategoryProducts"));
+
+            var deserializedCategories = new List<CategoryProductImportDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedCategories = (List<CategoryProductDTO>)serializer.Deserialize(reader);
+                deserializedCategories = (List<CategoryProductImportDTO>)serializer.Deserialize(reader);
             }
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<ProductShopProfile>();
             });
 
             IMapper mapper = new Mapper(config);
-            var categoryProducts = deserializedCategories.Select(x => mapper.Map<CategoryProductDTO, CategoryProduct>(x)).ToList();
+            var categoryProducts = deserializedCategories.Select(x => mapper.Map<CategoryProductImportDTO, CategoryProduct>(x)).ToList();
 
             var categoriesIds = context.Categories.Select(x => x.Id).ToList();
             var productsIds = context.Products.Select(x => x.Id).ToList();
@@ -61,21 +96,22 @@ namespace ProductShop
 
         public static string ImportCategories(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<CategoryDTO>), new XmlRootAttribute("Categories"));
-            
-            var deserializedCategories = new List<CategoryDTO>();
+            var serializer = new XmlSerializer(typeof(List<CategoryImportDTO>), new XmlRootAttribute("Categories"));
+
+            var deserializedCategories = new List<CategoryImportDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedCategories = (List<CategoryDTO>)serializer.Deserialize(reader);
+                deserializedCategories = (List<CategoryImportDTO>)serializer.Deserialize(reader);
             }
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<ProductShopProfile>();
             });
 
             IMapper mapper = new Mapper(config);
-            var categories = deserializedCategories.Select(x => mapper.Map<CategoryDTO, Category>(x)).ToList();
+            var categories = deserializedCategories.Select(x => mapper.Map<CategoryImportDTO, Category>(x)).ToList();
 
             context.Categories.AddRange(categories);
             var count = context.SaveChanges();
@@ -87,23 +123,24 @@ namespace ProductShop
 
         public static string ImportProducts(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<ProductDTO>), new XmlRootAttribute("Products"));
+            var serializer = new XmlSerializer(typeof(List<ProductImportDTO>), new XmlRootAttribute("Products"));
 
-            var deserializedProducts = new List<ProductDTO>();
+            var deserializedProducts = new List<ProductImportDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedProducts = (List<ProductDTO>)serializer.Deserialize(reader);
+                deserializedProducts = (List<ProductImportDTO>)serializer.Deserialize(reader);
             }
 
             var a = deserializedProducts.Where(x => x.BuyerId == null).ToList();
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<ProductShopProfile>();
             });
 
             IMapper mapper = new Mapper(config);
-            var products = deserializedProducts.Select(x => mapper.Map<ProductDTO, Product>(x)).ToList();
+            var products = deserializedProducts.Select(x => mapper.Map<ProductImportDTO, Product>(x)).ToList();
 
             context.Products.AddRange(products);
             var count = context.SaveChanges();
@@ -115,28 +152,29 @@ namespace ProductShop
 
         public static string ImportUsers(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<UserDTO>), new XmlRootAttribute("Users"));
+            var serializer = new XmlSerializer(typeof(List<UserImportDTO>), new XmlRootAttribute("Users"));
 
-            var deserializedUsers = new List<UserDTO>();
+            var deserializedUsers = new List<UserImportDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedUsers = (List<UserDTO>)serializer.Deserialize(reader);
+                deserializedUsers = (List<UserImportDTO>)serializer.Deserialize(reader);
             }
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<ProductShopProfile>();
             });
 
             IMapper mapper = new Mapper(config);
-            var users = deserializedUsers.Select(x => mapper.Map<UserDTO, User>(x)).ToList();
+            var users = deserializedUsers.Select(x => mapper.Map<UserImportDTO, User>(x)).ToList();
 
             context.Users.AddRange(users);
             var count = context.SaveChanges();
 
             var result = $"Successfully imported {count}";
 
-            return result;        
+            return result;
         }
     }
 }

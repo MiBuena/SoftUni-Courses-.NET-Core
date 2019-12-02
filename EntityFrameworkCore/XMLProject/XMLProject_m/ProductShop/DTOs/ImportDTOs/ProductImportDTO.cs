@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace ProductShop.DTOs
+namespace ProductShop.DTOs.ImportDTOs
 {
     [XmlType("Product")]
-    public class ProductDTO
+    public class ProductImportDTO
     {
         [XmlElement("name")]
         public string Name { get; set; }
