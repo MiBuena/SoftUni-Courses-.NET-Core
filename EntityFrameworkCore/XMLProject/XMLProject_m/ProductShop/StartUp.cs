@@ -17,19 +17,47 @@ namespace ProductShop
         {
             using (var context = new ProductShopContext())
             {
-                string xmlString = System.IO.File.ReadAllText("./../../../Datasets/products.xml");
+                string xmlString = System.IO.File.ReadAllText("./../../../Datasets/categories-products.xml");
 
                 //context.Database.Migrate();
-                var result = ImportProducts(context, xmlString);
+                var result = ImportCategoryProducts(context, xmlString);
 
                 Console.WriteLine(result);
             }
         }
 
-        //public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
-        //{
 
-        //}
+        public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
+        {
+            var serializer = new XmlSerializer(typeof(List<CategoryProductDTO>), new XmlRootAttribute("CategoryProducts"));
+            
+            var deserializedCategories = new List<CategoryProductDTO>();
+
+            using (var reader = new StringReader(inputXml))
+            {
+                deserializedCategories = (List<CategoryProductDTO>)serializer.Deserialize(reader);
+            }
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<ProductShopProfile>();
+            });
+
+            IMapper mapper = new Mapper(config);
+            var categoryProducts = deserializedCategories.Select(x => mapper.Map<CategoryProductDTO, CategoryProduct>(x)).ToList();
+
+            var categoriesIds = context.Categories.Select(x => x.Id).ToList();
+            var productsIds = context.Products.Select(x => x.Id).ToList();
+
+            var eligibleCategoryProducts = categoryProducts
+                .Where(x => categoriesIds.Contains(x.CategoryId) && productsIds.Contains(x.ProductId));
+
+            context.CategoryProducts.AddRange(eligibleCategoryProducts);
+            var count = context.SaveChanges();
+
+            var result = $"Successfully imported {count}";
+
+            return result;
+        }
 
         public static string ImportCategories(ProductShopContext context, string inputXml)
         {
