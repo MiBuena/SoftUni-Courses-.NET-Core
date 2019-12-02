@@ -23,10 +23,48 @@ namespace ProductShop
                 string xmlString = System.IO.File.ReadAllText("./../../../Datasets/categories-products.xml");
 
                 //context.Database.Migrate();
-                var result = GetProductsInRange(context);
+                var result = GetSoldProducts(context);
 
                 Console.WriteLine(result);
             }
+        }
+
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            var usersWithSoldItem = context.Users
+                .Where(x => x.ProductsSold.Any(y => y.BuyerId != null))
+                .OrderBy(x=>x.LastName)
+                .ThenBy(x=>x.FirstName)
+                .Take(5)
+                .Select(x=>
+                new UsersWithSoldProductsExportDTO()
+                { 
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    SoldProducts = x.ProductsSold.Select(y => new SoldProductsExportDTO()
+                    {
+                        Name = y.Name,
+                        Price = y.Price
+                    }).ToList()
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<UsersWithSoldProductsExportDTO>),
+                new XmlRootAttribute("Users"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, usersWithSoldItem, namespaces);
+            }
+
+            return sb.ToString();
         }
 
         public static string GetProductsInRange(ProductShopContext context)
