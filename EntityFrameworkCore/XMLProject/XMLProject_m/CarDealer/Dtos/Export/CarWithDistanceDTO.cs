@@ -3,26 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace CarDealer.Dtos.Import
+namespace CarDealer.Dtos.Export
 {
-    [XmlType("Car")]
-    public class CarDTO
+    [XmlType("car")]
+    public class CarWithDistanceDTO
     {
-        public CarDTO()
-        {
-            Parts = new List<PartIdsDTO>();
-        }
-
         [XmlElement("make")]
         public string Make { get; set; }
 
         [XmlElement("model")]
         public string Model { get; set; }
 
-        [XmlElement("TraveledDistance")]
+        [XmlElement("travelled-distance")]
         public long TravelledDistance { get; set; }
-
-        [XmlArray("parts")]
-        public List<PartIdsDTO> Parts { get; set; }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CarDealer.Data;
+using CarDealer.Dtos.Export;
 using CarDealer.Dtos.Import;
 using CarDealer.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace CarDealer
@@ -16,12 +19,141 @@ namespace CarDealer
         {
             using (var context = new CarDealerContext())
             {
-                string xmlString = System.IO.File.ReadAllText("./../../../Datasets/customers.xml");
+                string xmlString = System.IO.File.ReadAllText("./../../../Datasets/sales.xml");
 
-                var result = ImportCustomers(context, xmlString);
+                var result = GetLocalSuppliers(context);
+
+                Console.WriteLine(result);
             }
 
 
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var suppliers = context.Suppliers
+                .Where(x => !x.IsImporter)
+                .Select(x => new Dtos.Export.SupplierDTO()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    PartsCount = x.Parts.Count
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<Dtos.Export.SupplierDTO>),
+                new XmlRootAttribute("suppliers"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, suppliers, namespaces);
+            }
+
+            return sb.ToString();
+
+        }
+
+        public static string GetCarsFromMakeBmw(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Where(x => x.Make == "BMW")
+                .OrderBy(x=>x.Model)
+                .ThenByDescending(x=>x.TravelledDistance)
+                .Select(x=> new CarBMWDTO()
+                {
+                    Id = x.Id,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<CarBMWDTO>),
+                new XmlRootAttribute("cars"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, cars, namespaces);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string GetCarsWithDistance(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Where(x => x.TravelledDistance > 2000000)
+                .OrderBy(y => y.Make)
+                .ThenBy(y => y.Model)
+                .Take(10)
+                .Select(x => new CarWithDistanceDTO
+                {
+                    Make = x.Make,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<CarWithDistanceDTO>),
+                new XmlRootAttribute("cars"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, cars, namespaces);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string ImportSales(CarDealerContext context, string inputXml)
+        {
+            var serializer = new XmlSerializer(typeof(List<SaleDTO>), new XmlRootAttribute("Sales"));
+
+            var deserializedSales = new List<SaleDTO>();
+
+            using (var reader = new StringReader(inputXml))
+            {
+                deserializedSales = (List<SaleDTO>)serializer.Deserialize(reader);
+            }
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<CarDealerProfile>();
+            });
+
+            var carIds = context.Cars.Select(x => x.Id).ToList();
+
+            deserializedSales = deserializedSales.Where(x => carIds.Contains(x.CarId)).ToList();
+
+            IMapper mapper = new Mapper(config);
+            var sales = deserializedSales.Select(x => mapper.Map<SaleDTO, Sale>(x)).ToList();
+
+            context.Sales.AddRange(sales);
+            var count = context.SaveChanges();
+
+            var result = $"Successfully imported {count}";
+
+            return result;
         }
 
         public static string ImportCustomers(CarDealerContext context, string inputXml)
@@ -160,13 +292,13 @@ namespace CarDealer
 
         public static string ImportSuppliers(CarDealerContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<SupplierDTO>), new XmlRootAttribute("Suppliers"));
+            var serializer = new XmlSerializer(typeof(List<Dtos.Import.SupplierDTO>), new XmlRootAttribute("Suppliers"));
 
-            var deserializedSuppliers = new List<SupplierDTO>();
+            var deserializedSuppliers = new List<Dtos.Import.SupplierDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedSuppliers = (List<SupplierDTO>)serializer.Deserialize(reader);
+                deserializedSuppliers = (List<Dtos.Import.SupplierDTO>)serializer.Deserialize(reader);
             }
 
             var config = new MapperConfiguration(cfg =>
@@ -176,7 +308,7 @@ namespace CarDealer
 
 
             IMapper mapper = new Mapper(config);
-            var suppliers = deserializedSuppliers.Select(x => mapper.Map<SupplierDTO, Supplier>(x)).ToList();
+            var suppliers = deserializedSuppliers.Select(x => mapper.Map<Dtos.Import.SupplierDTO, Supplier>(x)).ToList();
 
             context.Suppliers.AddRange(suppliers);
             var count = context.SaveChanges();
