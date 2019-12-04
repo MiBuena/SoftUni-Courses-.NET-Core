@@ -21,12 +21,82 @@ namespace CarDealer
             {
                 string xmlString = System.IO.File.ReadAllText("./../../../Datasets/sales.xml");
 
-                var result = GetLocalSuppliers(context);
+                var result = GetTotalSalesByCustomer(context);
 
                 Console.WriteLine(result);
             }
 
+        }
 
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(x => x.Sales.Any())
+                .Select(x => new CustomerCarDTO()
+                {
+                    Name = x.Name,
+                    BoughtCarsCount = x.Sales.Count,
+                    TotalMoneySpent = x.Sales.Sum(m => m.Car.PartCars.Sum(l => l.Part.Price))
+                })
+                .OrderByDescending(x=>x.TotalMoneySpent)
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<Dtos.Export.CustomerCarDTO>),
+                new XmlRootAttribute("customers"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, customers, namespaces);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Select(x => new CarPartsDTO()
+                {
+                    Make = x.Make,
+                    Model = x.Model,
+                    TravelledDistance = x.TravelledDistance,
+                    Parts = x.PartCars
+                    .Select(y => new Dtos.Export.PartDTO()
+                    {
+                        Name = y.Part.Name,
+                        Price = y.Part.Price
+                    })
+                    .OrderByDescending(y => y.Price)
+                    .ToList()
+                })
+                .OrderByDescending(x => x.TravelledDistance)
+                .ThenBy(x => x.Model)
+                .Take(5)
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<Dtos.Export.CarPartsDTO>),
+                new XmlRootAttribute("cars"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, cars, namespaces);
+            }
+
+            return sb.ToString();
         }
 
         public static string GetLocalSuppliers(CarDealerContext context)
@@ -64,9 +134,9 @@ namespace CarDealer
         {
             var cars = context.Cars
                 .Where(x => x.Make == "BMW")
-                .OrderBy(x=>x.Model)
-                .ThenByDescending(x=>x.TravelledDistance)
-                .Select(x=> new CarBMWDTO()
+                .OrderBy(x => x.Model)
+                .ThenByDescending(x => x.TravelledDistance)
+                .Select(x => new CarBMWDTO()
                 {
                     Id = x.Id,
                     Model = x.Model,
@@ -210,7 +280,7 @@ namespace CarDealer
                 {
                     var id = car.Parts[i].Id;
 
-                    if(!newList.Any(x=>x.Id == id))
+                    if (!newList.Any(x => x.Id == id))
                     {
                         newList.Add(new PartIdsDTO() { Id = id });
                     }
@@ -260,13 +330,13 @@ namespace CarDealer
 
         public static string ImportParts(CarDealerContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(List<PartDTO>), new XmlRootAttribute("Parts"));
+            var serializer = new XmlSerializer(typeof(List<Dtos.Import.PartDTO>), new XmlRootAttribute("Parts"));
 
-            var deserializedParts = new List<PartDTO>();
+            var deserializedParts = new List<Dtos.Import.PartDTO>();
 
             using (var reader = new StringReader(inputXml))
             {
-                deserializedParts = (List<PartDTO>)serializer.Deserialize(reader);
+                deserializedParts = (List<Dtos.Import.PartDTO>)serializer.Deserialize(reader);
             }
 
             var suppliersIds = context.Suppliers.Select(x => x.Id).ToList();
@@ -280,7 +350,7 @@ namespace CarDealer
 
 
             IMapper mapper = new Mapper(config);
-            var parts = partsToAdd.Select(x => mapper.Map<PartDTO, Part>(x)).ToList();
+            var parts = partsToAdd.Select(x => mapper.Map<Dtos.Import.PartDTO, Part>(x)).ToList();
 
             context.Parts.AddRange(parts);
             var count = context.SaveChanges();
