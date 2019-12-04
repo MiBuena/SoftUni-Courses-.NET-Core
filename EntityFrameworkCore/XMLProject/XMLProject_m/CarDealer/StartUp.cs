@@ -21,11 +21,48 @@ namespace CarDealer
             {
                 string xmlString = System.IO.File.ReadAllText("./../../../Datasets/sales.xml");
 
-                var result = GetTotalSalesByCustomer(context);
+                var result = GetSalesWithAppliedDiscount(context);
 
                 Console.WriteLine(result);
             }
 
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var sale = context.Sales
+                .Select(x => new SaleExportDTO()
+                {
+                    Car = new CarWithDistanceAttrDTO
+                    {
+                        Make = x.Car.Make,
+                        Model = x.Car.Model,
+                        TravelledDistance = x.Car.TravelledDistance
+                    },
+
+                    Discount = x.Discount,
+                    CustomerName = x.Customer.Name,
+                    Price = string.Format("{0}", x.Car.PartCars.Sum(y => y.Part.Price)),
+                    PriceWithDiscount = string.Format("{0}", x.Car.PartCars.Sum(y => y.Part.Price) * (1 - x.Discount / 100))
+                })
+                .ToList();
+
+
+            var sb = new StringBuilder();
+
+            var serializer =
+                new XmlSerializer(typeof(List<SaleExportDTO>),
+                new XmlRootAttribute("sales"));
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(sb))
+            {
+                serializer.Serialize(writer, sale, namespaces);
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetTotalSalesByCustomer(CarDealerContext context)
@@ -38,7 +75,7 @@ namespace CarDealer
                     BoughtCarsCount = x.Sales.Count,
                     TotalMoneySpent = x.Sales.Sum(m => m.Car.PartCars.Sum(l => l.Part.Price))
                 })
-                .OrderByDescending(x=>x.TotalMoneySpent)
+                .OrderByDescending(x => x.TotalMoneySpent)
                 .ToList();
 
 
