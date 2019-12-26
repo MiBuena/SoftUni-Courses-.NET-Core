@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using WebApplicationWithIdentity.Services
+@inject IDataService dataService
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@{
+    var count = dataService.GetCount();
+}
+
+<div>@count</div>
+
+
+<div class="view-component-content">
+
+    @*@await Component.InvokeAsync("HelloWorld", new { name = "David" });*@
+
+    <vc:HelloWorld name="John"></vc:HelloWorld>
+
+</div>
+
+<div class="tag-helper-content">
+
+    <h1 target-name="John"></h1>
+</div>
+
+<partial name="..\_CommonCodePartial.cshtml" />
+
