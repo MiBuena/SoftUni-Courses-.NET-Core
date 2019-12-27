@@ -3,7 +3,10 @@
 }
 
 @using WebApplicationWithIdentity.Services
+@using Microsoft.Extensions.Configuration;
+
 @inject IDataService dataService
+@inject IConfiguration configuration
 
 
 <div class="text-center">
@@ -17,14 +20,15 @@
 
 <div>@count</div>
 
+@{
+    var allowedHosts = configuration["AllowedHosts"];
+    var connectionString = configuration["ConnectionStrings:DefaultConnection"];
+    var productionSettings = configuration["T"];
+}
 
-<div class="view-component-content">
-
-    @*@await Component.InvokeAsync("HelloWorld", new { name = "David" });*@
-
-    <vc:HelloWorld name="John"></vc:HelloWorld>
-
-</div>
+<div>@allowedHosts</div>
+<div>@connectionString</div>
+<div>@productionSettings</div>
 
 <div class="tag-helper-content">
 
