@@ -47,7 +47,6 @@ namespace WebApplicationWithIdentity
             //    options.Filters.Add(new CustomFilterAttribute());
             //    options.Filters.Add(new AuthorizationTryFilterAttribute());
             //    options.Filters.Add(new MyResourceFilterAttribute());
-
             //});
         }
 
