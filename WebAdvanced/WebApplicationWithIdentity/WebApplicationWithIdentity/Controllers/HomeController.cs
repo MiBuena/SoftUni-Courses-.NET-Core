@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using WebApplicationWithIdentity.Filters;
 using WebApplicationWithIdentity.Models;
 
 namespace WebApplicationWithIdentity.Controllers

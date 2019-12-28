@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplicationWithIdentity.Services;
+using WebApplicationWithIdentity.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplicationWithIdentity
 {
@@ -38,6 +40,14 @@ namespace WebApplicationWithIdentity
 
             //Application services
             services.AddTransient<IDataService, DataService>();
+
+            //services.AddMvc(options =>
+            //{
+            //    options.Filters.Add(new CustomFilterAttribute());
+            //    options.Filters.Add(new AuthorizationTryFilterAttribute());
+            //    options.Filters.Add(new MyResourceFilterAttribute());
+
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
