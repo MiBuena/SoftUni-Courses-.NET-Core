@@ -10,15 +10,20 @@ namespace WebApplicationWithIdentity.Filters
 {
     public class CustomFilterAttribute : ActionFilterAttribute
     {
+        private readonly IConfiguration _configuration;
+
+        public CustomFilterAttribute(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            IConfiguration config = (IConfiguration)context.HttpContext.RequestServices.GetService(typeof(IConfiguration));
+            var functionalityConfigValue = _configuration["IsFunctionalityEnabled"];
 
-            var areEnabledConfigValue = config["IsFunctionalityEnabled"];
+            var isFunctionalityEnabled = functionalityConfigValue != null && functionalityConfigValue.ToLower() == "true";
 
-            var areAdvertsEnabled = areEnabledConfigValue != null && areEnabledConfigValue.ToLower() == "true";
-
-            if (!areAdvertsEnabled)
+            if (!isFunctionalityEnabled)
             {
                 context.Result = new RedirectToActionResult("Index", "Home", null);
             }

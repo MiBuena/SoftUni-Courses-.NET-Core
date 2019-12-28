@@ -27,6 +27,7 @@ namespace WebApplicationWithIdentity.Controllers
             return View();
         }
 
+        [ServiceFilter(typeof(CustomFilterAttribute))]
         public IActionResult Privacy()
         {
             return View();

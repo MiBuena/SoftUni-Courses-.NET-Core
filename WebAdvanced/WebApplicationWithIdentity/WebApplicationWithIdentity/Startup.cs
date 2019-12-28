@@ -40,6 +40,7 @@ namespace WebApplicationWithIdentity
 
             //Application services
             services.AddTransient<IDataService, DataService>();
+            services.AddTransient<CustomFilterAttribute>();
 
             //services.AddMvc(options =>
             //{
