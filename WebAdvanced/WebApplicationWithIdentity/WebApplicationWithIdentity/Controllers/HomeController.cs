@@ -22,9 +22,20 @@ namespace WebApplicationWithIdentity.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(ControllerModel model)
         {
             return View();
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(CreateInputModel model)
+        {
+            return Json(model);
         }
 
         [ServiceFilter(typeof(CustomFilterAttribute))]

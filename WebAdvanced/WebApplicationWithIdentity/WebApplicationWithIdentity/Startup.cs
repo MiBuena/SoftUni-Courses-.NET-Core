@@ -42,12 +42,12 @@ namespace WebApplicationWithIdentity
             services.AddTransient<IDataService, DataService>();
             services.AddTransient<CustomFilterAttribute>();
 
-            //services.AddMvc(options =>
-            //{
-            //    options.Filters.Add(new CustomFilterAttribute());
-            //    options.Filters.Add(new AuthorizationTryFilterAttribute());
-            //    options.Filters.Add(new MyResourceFilterAttribute());
-            //});
+            services.AddMvc(options =>
+            {
+                //options.Filters.Add(new AuthorizationTryFilterAttribute());
+                //options.Filters.Add(new MyResourceFilterAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,22 @@
+﻿@using WebApplicationWithIdentity.Models;
+@using WebApplicationWithIdentity.Enums;
+
+@model CreateInputModel
+
+<form asp-controller="Home" asp-action="Create" method="post">
+
+    <label asp-for="Name"></label>
+    <input asp-for="Name" />
+
+    <label asp-for="FirstDescription"></label>
+    <input asp-for="FirstDescription" />
+
+    <label asp-for="InternalModel.Brand"></label>
+    <input asp-for="InternalModel.Brand" />
+
+    <label asp-for="BreadType"></label>
+    <select asp-for="BreadType" asp-items="@Html.GetEnumSelectList<BreadType>()"></select>
+
+    <input type="submit" name="name" value="" />
+
+</form>
