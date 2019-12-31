@@ -22,7 +22,6 @@ namespace WebApplicationWithIdentity.Models
         public string Email { get; set; }
 
         [Range(1, 200)]
-        [Required]
         public int Number { get; set; }
     }
 }

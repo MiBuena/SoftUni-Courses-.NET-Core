@@ -53,8 +53,7 @@ namespace WebApplicationWithIdentity.Controllers
         [HttpPost]
         public IActionResult BindModel(Student model)
         {
-
-            return null;
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
