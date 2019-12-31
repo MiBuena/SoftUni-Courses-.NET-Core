@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApplicationWithIdentity.Filters;
+using WebApplicationWithIdentity.ModelBinder;
 using WebApplicationWithIdentity.Models;
 
 namespace WebApplicationWithIdentity.Controllers
@@ -42,6 +43,18 @@ namespace WebApplicationWithIdentity.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult BindModel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult BindModel(Student model)
+        {
+
+            return null;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

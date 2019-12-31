@@ -1,0 +1,9 @@
+﻿@using WebApplicationWithIdentity.Models;
+
+@model Student
+
+    <form asp-controller="Home" asp-action="BindModel" method="post">
+        <input asp-for="YearToBind" />
+
+        <input type="submit" name="name" value="" />
+    </form>

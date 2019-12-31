@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using WebApplicationWithIdentity.Services;
 using WebApplicationWithIdentity.Filters;
 using Microsoft.AspNetCore.Mvc;
+using WebApplicationWithIdentity.ModelBinder;
 
 namespace WebApplicationWithIdentity
 {
@@ -44,6 +45,8 @@ namespace WebApplicationWithIdentity
 
             services.AddMvc(options =>
             {
+                options.ModelBinderProviders.Insert(0, new DateTimeToYearModelBinderProvider());
+
                 //options.Filters.Add(new AuthorizationTryFilterAttribute());
                 //options.Filters.Add(new MyResourceFilterAttribute());
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
