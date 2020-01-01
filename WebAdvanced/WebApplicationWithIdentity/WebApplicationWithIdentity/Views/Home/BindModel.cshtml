@@ -8,9 +8,18 @@
 
         <input asp-for="YearToBind" />
         <input asp-for="Password" />
-        <input asp-for="RepeatPassword"/>
+        <span asp-validation-for="Password"></span>
+        <input asp-for="RepeatPassword" />
         <input asp-for="Email" />
-        <input asp-for="Number"/>
+        <input asp-for="Number" />
+        <input asp-for="ProductionYear" />
+        <input asp-for="Description" />
 
         <input type="submit" name="name" value="" />
     </form>
+
+
+@section Scripts 
+{
+    <partial name="..\Shared\_ValidationScriptsPartial.cshtml" />
+}

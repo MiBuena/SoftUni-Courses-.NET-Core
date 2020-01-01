@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationWithIdentity.ModelBinder;
+using WebApplicationWithIdentity.ValidationAttributes;
 
 namespace WebApplicationWithIdentity.Models
 {
@@ -13,6 +14,8 @@ namespace WebApplicationWithIdentity.Models
         [DataType(DataType.Date)]
         public int YearToBind { get; set; }
 
+        [Required]
+        [StringLength(5, MinimumLength = 5)]
         public string Password { get; set; }
 
         [Compare(nameof(Password))]
@@ -23,5 +26,11 @@ namespace WebApplicationWithIdentity.Models
 
         [Range(1, 200)]
         public int Number { get; set; }
+
+        [BeforeCurrentYear(2000)]
+        public DateTime ProductionYear { get; set; }
+
+        [RegularExpression("[A-Z][a-z]+")]
+        public string Description { get; set; }
     }
 }
