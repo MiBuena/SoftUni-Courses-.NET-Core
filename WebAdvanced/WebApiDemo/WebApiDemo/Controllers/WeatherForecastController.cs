@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebApiDemo.Models;
 
 namespace WebApiDemo.Controllers
 {
@@ -34,8 +35,8 @@ namespace WebApiDemo.Controllers
             .ToArray();
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> GetOneForecase()
+        [HttpGet("GetOneForecast/{id}")]
+        public IEnumerable<WeatherForecast> GetOneForecast()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -45,6 +46,17 @@ namespace WebApiDemo.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("GetBall")]
+        public Ball GetBall()
+        {
+            var ball = new Ball()
+            {
+                Weight = 2
+            };
+
+            return ball;
         }
     }
 }
