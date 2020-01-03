@@ -36,7 +36,7 @@ namespace WebApiDemo.Controllers
         }
 
         [HttpGet("GetOneForecast/{id}")]
-        public IEnumerable<WeatherForecast> GetOneForecast()
+        public ActionResult<IEnumerable<WeatherForecast>> GetOneForecast()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -49,7 +49,7 @@ namespace WebApiDemo.Controllers
         }
 
         [HttpGet("GetBall")]
-        public Ball GetBall()
+        public ActionResult<Ball> GetBall()
         {
             var ball = new Ball()
             {
@@ -57,6 +57,26 @@ namespace WebApiDemo.Controllers
             };
 
             return ball;
+        }
+
+
+        [HttpGet("GetFish/{year:int}")]
+        public ActionResult<Ball> GetFish(int year)
+        {
+            var ball = new Ball()
+            {
+                Weight = 2
+            };
+
+            //return ball;
+
+            return this.BadRequest();
+        }
+
+        [HttpPut("{id}")]
+        public void GetPutFish(int id, [FromBody]string data)
+        {
+
         }
     }
 }
