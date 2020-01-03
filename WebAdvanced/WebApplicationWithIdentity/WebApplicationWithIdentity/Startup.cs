@@ -46,10 +46,15 @@ namespace WebApplicationWithIdentity
             services.AddMvc(options =>
             {
                 options.ModelBinderProviders.Insert(0, new DateTimeToYearModelBinderProvider());
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+
+            services.AddControllersWithViews(options =>
+            {
                 //options.Filters.Add(new AuthorizationTryFilterAttribute());
                 //options.Filters.Add(new MyResourceFilterAttribute());
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(typeof(AutoValidateAntiforgeryTokenAttribute));
             });
         }
 
