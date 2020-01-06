@@ -35,16 +35,17 @@ namespace IdentityDemo
             services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
-                //options.Password.RequireDigit = false;
-                //options.Password.RequireLowercase = false;
-                //options.Password.RequiredUniqueChars = 0;
-                //options.Password.RequireNonAlphanumeric = false;
-                //options.Password.RequireUppercase = false;
-                //options.Password.RequiredLength = 2;
-                options.User.AllowedUserNameCharacters = "bm";
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 2;
+                //options.User.AllowedUserNameCharacters = "bm";
                 options.Lockout.MaxFailedAccessAttempts = 5;
             }
                 )
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             
