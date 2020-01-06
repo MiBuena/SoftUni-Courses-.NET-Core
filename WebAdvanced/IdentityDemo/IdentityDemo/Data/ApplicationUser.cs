@@ -8,5 +8,6 @@ namespace IdentityDemo.Data
 {
     public class ApplicationUser : IdentityUser<string>
     {
+        public DateTime? DateOfBirth { get; set; }
     }
 }

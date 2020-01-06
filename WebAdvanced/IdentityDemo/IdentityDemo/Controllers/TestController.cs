@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityDemo.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,13 +12,13 @@ namespace IdentityDemo.Controllers
     //[Authorize]
     public class TestController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public TestController(
-            UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -27,7 +28,7 @@ namespace IdentityDemo.Controllers
 
         public async Task<ActionResult> CreateUser()
         {
-            //var identityUser = new IdentityUser()
+            //var identityUser = new ApplicationUser()
             //{
             //    Email = "aa@a.b14",
             //    UserName = "UsernameM14",
@@ -45,8 +46,8 @@ namespace IdentityDemo.Controllers
 
             //await this._userManager.AddToRoleAsync(identityUser, "Admin");
 
-            
-            
+
+
             await this._signInManager.PasswordSignInAsync("UsernameM", "1234567", false, false);
 
             return this.Ok();
