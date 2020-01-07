@@ -22,6 +22,12 @@ namespace WebApiDemo.Controllers
             _logger = logger;
         }
 
+        [HttpGet("GetSettings")]
+        public ActionResult<string> GetSettings()
+        {
+            return null;
+        }
+
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
